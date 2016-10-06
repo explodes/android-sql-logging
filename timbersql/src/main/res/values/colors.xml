@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="priority_verbose">#bbbbbb</color>
+    <color name="priority_debug">#33B5E5</color>
+    <color name="priority_info">#99cc00</color>
+    <color name="priority_warn">#ffbb33</color>
+    <color name="priority_error">#FF6B68</color>
+    <color name="priority_assert">#aa66cc</color>
+
+    <color name="log_item_message">#444</color>
+    <color name="log_item_exception">#666</color>
+    <color name="log_item_swipe_border">#77ff2222</color>
+</resources>

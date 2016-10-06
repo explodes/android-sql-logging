@@ -1,0 +1,33 @@
+<resources>
+    <string name="app_name">timbersql</string>
+
+    <string name="title_log_viewer">Timber Logs</string>
+
+    <string name="priority_verbose">V/</string>
+    <string name="priority_debug">D/</string>
+    <string name="priority_info">I/</string>
+    <string name="priority_warn">W/</string>
+    <string name="priority_error">E/</string>
+    <string name="priority_assert">A/</string>
+
+    <string name="menu_filter">Filter</string>
+    <string name="menu_clear">Clear logs</string>
+    <string name="menu_sort">Sort</string>
+
+    <string name="select_sort">Sort by</string>
+    <string-array name="sort_names">
+        <item>Date</item>
+        <item>Level</item>
+    </string-array>
+
+    <string name="select_priority">Show priority</string>
+    <string-array name="priority_names">
+        <item>Verbose</item>
+        <item>Debug</item>
+        <item>Info</item>
+        <item>Warn</item>
+        <item>Error</item>
+        <item>Assert</item>
+    </string-array>
+
+</resources>

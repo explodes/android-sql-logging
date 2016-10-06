@@ -1,0 +1,18 @@
+<resources>
+    <string name="app_name">TimberSql</string>
+
+    <string name="generate_log_entry">Generate log entry…</string>
+    <string name="add_exception">With Exception</string>
+    <string name="exception_message">Exception message</string>
+    <string name="view_logs">View logs…</string>
+
+    <string name="generate_verbose">Generate Verbose</string>
+    <string name="generate_debug">Generate Debug</string>
+    <string name="generate_info">Generate Info</string>
+    <string name="generate_warn">Generate Warn</string>
+    <string name="generate_error">Generate Error</string>
+    <string name="generate_assert">Generate Assert</string>
+
+    <string name="error_need_message_or_exception">Need error message or exception to log</string>
+
+</resources>
