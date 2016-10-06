@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">TimberSql</string>
+    <string name="app_name">Sql Logger Sample</string>
 
     <string name="generate_log_entry">Generate log entry…</string>
     <string name="add_exception">With Exception</string>

@@ -1,7 +1,7 @@
 <resources>
-    <string name="app_name">timbersql</string>
+    <string name="app_name">sqllog</string>
 
-    <string name="title_log_viewer">Timber Logs</string>
+    <string name="title_log_viewer">Logs</string>
 
     <string name="priority_verbose">V/</string>
     <string name="priority_debug">D/</string>
