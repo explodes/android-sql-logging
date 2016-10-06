@@ -25,7 +25,7 @@ public class SqlLoggingTree extends Timber.Tree {
 	@Override
 	protected void log(int priority, @Nullable String tag, @NonNull String message, @Nullable Throwable t) {
 		if (TextUtils.isEmpty(tag)) tag = mDefaultTag;
-		LogEntry entry = LogEntry.createLogEntry(priority, tag, message);
+		LogEntry entry = LogEntry.create(priority, tag, message);
 		LogEntryProvider.insertLogEntry(mContext, entry);
 	}
 

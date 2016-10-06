@@ -10,6 +10,8 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import io.explod.android.sqllog.data.LogEntry;
+import io.explod.android.sqllog.data.LogEntryProvider;
 import io.explod.android.sqllog.sample.R;
 import io.explod.android.sqllog.ui.activity.LogViewerActivity;
 import timber.log.Timber;
@@ -66,8 +68,10 @@ public class MainActivity extends AppCompatActivity {
 		if (logException) {
 			Exception sample = new Exception("sample exception");
 			Timber.tag(TAG).log(priority, sample, message);
+			LogEntryProvider.insertLogEntry(this, LogEntry.create(priority, TAG, message, sample));
 		} else {
 			Timber.tag(TAG).log(priority, message);
+			LogEntryProvider.insertLogEntry(this, LogEntry.create(priority, TAG, message));
 		}
 	}
 

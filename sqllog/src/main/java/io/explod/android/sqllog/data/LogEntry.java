@@ -3,16 +3,41 @@ package io.explod.android.sqllog.data;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+import android.text.TextUtils;
+
+import java.io.PrintWriter;
+import java.io.StringWriter;
 
 public final class LogEntry implements Parcelable {
 
-	public static LogEntry createLogEntry(int priority, @NonNull String tag, @NonNull String message) {
+	public static LogEntry create(int priority, @NonNull String tag, @Nullable String message) {
+		return create(priority, tag, message, null);
+	}
+
+	public static LogEntry create(int priority, @NonNull String tag, @Nullable String message, @Nullable Throwable t) {
 		return new LogEntry(
 			System.currentTimeMillis(),
 			priority,
 			tag,
-			message
+			buildMessage(message, t)
 		);
+	}
+
+	@NonNull
+	private static String buildMessage(@Nullable String message, @Nullable Throwable t) {
+		if (t != null) {
+			StringWriter sw = new StringWriter(256);
+			if (!TextUtils.isEmpty(message)) {
+				sw.append(message);
+				sw.append('\n');
+			}
+			PrintWriter pw = new PrintWriter(sw, false);
+			t.printStackTrace(pw);
+			pw.flush();
+			return sw.toString();
+		}
+		return TextUtils.isEmpty(message) ? "" : message;
 	}
 
 	public final long timestamp;

@@ -6,7 +6,7 @@ import android.provider.BaseColumns;
 
 public class LogEntryContract {
 
-	public static final String AUTHORITY = "io.explod.android.timbersql.logentry";
+	public static final String AUTHORITY = "io.explod.android.sqllog.logentry";
 
 	public static final String TABLE = "log";
 
