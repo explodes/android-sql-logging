@@ -24,8 +24,10 @@
 
         <provider
             android:name="io.explod.android.sqllog.data.LogEntryProvider"
-            android:authorities="io.explod.android.sqllog.logentry"
+            android:authorities="io.explod.android.sqllog.sample.logentry"
             android:exported="false"/>
+
+        <meta-data android:name="io.explod.sqllog.log.authority" android:value="io.explod.android.sqllog.sample.logentry"/>
     </application>
 
 </manifest>
