@@ -14,7 +14,7 @@ Usage
 -----
 
 In your app's AndroidManifest, you will need to include two items:
-```
+```xml
 <activity
     android:name="io.explod.android.timbersql.ui.activity.LogViewerActivity"
     android:exported="false"/>
@@ -27,7 +27,7 @@ In your app's AndroidManifest, you will need to include two items:
 
 To log to the SQL database, you will need to plant the `SQLLoggingTree`:
 
-```
+```java
 public class App extends Application {
 
 	private static final String DEFAULT_TAG = "TimberSqlSampleApp";
@@ -42,7 +42,7 @@ public class App extends Application {
 The default tag is used when no tag is provided.
 
 And finally, to view the logs, you start the activity:
-```
+```java
 	private void goToLogViewer() {
 		Intent intent = new Intent(this, LogViewerActivity.class);
 		startActivity(intent);
