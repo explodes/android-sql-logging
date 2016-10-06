@@ -8,6 +8,8 @@ Log to a sql database for debugging. View the logs in-app with the LogViewerActi
 This library was created when I decided that having my phone attached to logcat for hours in hopes a
 heisenbug would appear in a service was too inefficient.
 
+Works with API level 11+
+
 Usage
 -----
 
