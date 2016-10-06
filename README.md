@@ -13,6 +13,30 @@ Works with API level 11+
 Usage
 -----
 
+Logging is done manually by wait of...
+```java
+    LogEntry entry = LogEntry.createLogEntry(Log.DEBUG, TAG, "Hit critical function");
+    LogEntryProvider.insertLogEntry(context, entry);
+```
+
+...or you can plant a tree with Timber using `SQLLoggingTree`:
+
+```java
+public class App extends Application {
+
+    // The default tag is used when no tag is provided.
+	private static final String DEFAULT_TAG = "TimberSqlSampleApp";
+
+	@Override
+	public void onCreate() {
+		Timber.plant(new SqlLoggingTree(this, DEFAULT_TAG));
+	}
+}
+```
+
+Setup
+-----
+
 In your app's AndroidManifest, you will need to include two items:
 ```xml
 <activity
@@ -24,22 +48,6 @@ In your app's AndroidManifest, you will need to include two items:
     android:authorities="io.explod.android.timbersql.logentry"
     android:exported="false"/>
 ```
-
-To log to the SQL database, you will need to plant the `SQLLoggingTree`:
-
-```java
-public class App extends Application {
-
-	private static final String DEFAULT_TAG = "TimberSqlSampleApp";
-
-	@Override
-	public void onCreate() {
-		Timber.plant(new Timber.DebugTree(), new SqlLoggingTree(this, DEFAULT_TAG));
-	}
-}
-```
-
-The default tag is used when no tag is provided.
 
 And finally, to view the logs, you start the activity:
 ```java
