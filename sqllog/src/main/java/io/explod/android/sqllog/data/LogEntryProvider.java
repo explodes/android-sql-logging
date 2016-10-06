@@ -26,8 +26,8 @@ public class LogEntryProvider extends ContentProvider {
 	private static final UriMatcher sUriMatcher = new UriMatcher(UriMatcher.NO_MATCH);
 
 	static {
-		sUriMatcher.addURI(LogEntryContract.AUTHORITY, LogEntryContract.LogEntry.TABLE, LOG_ENTRY_TABLE);
-		sUriMatcher.addURI(LogEntryContract.AUTHORITY, LogEntryContract.LogEntry.TABLE + "/#", LOG_ENTRY_ROW);
+		sUriMatcher.addURI(LogEntryContract.AUTHORITY, LogEntryContract.TABLE, LOG_ENTRY_TABLE);
+		sUriMatcher.addURI(LogEntryContract.AUTHORITY, LogEntryContract.TABLE + "/#", LOG_ENTRY_ROW);
 	}
 
 	private LogEntryDbHelper mDbHelper;
@@ -48,9 +48,9 @@ public class LogEntryProvider extends ContentProvider {
 	public String getType(@NonNull Uri uri) {
 		switch (sUriMatcher.match(uri)) {
 			case LOG_ENTRY_TABLE:
-				return LogEntryContract.LogEntry.CONTENT_TYPE;
+				return LogEntryContract.CONTENT_TYPE;
 			case LOG_ENTRY_ROW:
-				return LogEntryContract.LogEntry.CONTENT_ITEM_TYPE;
+				return LogEntryContract.CONTENT_ITEM_TYPE;
 			default:
 				return null;
 		}
@@ -67,22 +67,22 @@ public class LogEntryProvider extends ContentProvider {
 			case LOG_ENTRY_TABLE: {
 				SQLiteDatabase db = mDbHelper.getReadableDatabase();
 				if (TextUtils.isEmpty(sortOrder))
-					sortOrder = LogEntryContract.LogEntry.SORT_DEFAULT;
+					sortOrder = LogEntryContract.Sort.DEFAULT;
 
-				return db.query(LogEntryContract.LogEntry.TABLE, projection, selection, selectionArgs, null, null, sortOrder);
+				return db.query(LogEntryContract.TABLE, projection, selection, selectionArgs, null, null, sortOrder);
 			}
 			case LOG_ENTRY_ROW: {
 				SQLiteDatabase db = mDbHelper.getReadableDatabase();
 				if (TextUtils.isEmpty(sortOrder))
-					sortOrder = LogEntryContract.LogEntry.SORT_DEFAULT;
+					sortOrder = LogEntryContract.Sort.DEFAULT;
 
 				long id = ContentUris.parseId(uri);
-				String where = LogEntryContract.LogEntryColumns._ID + " = " + id;
+				String where = LogEntryContract.Columns._ID + " = " + id;
 				if (!TextUtils.isEmpty(selection)) {
 					where += " AND " + selection;
 				}
 
-				return db.query(LogEntryContract.LogEntry.TABLE, projection, where, selectionArgs, null, null, sortOrder);
+				return db.query(LogEntryContract.TABLE, projection, where, selectionArgs, null, null, sortOrder);
 			}
 			default:
 				return null;
@@ -97,12 +97,12 @@ public class LogEntryProvider extends ContentProvider {
 		switch (sUriMatcher.match(uri)) {
 			case LOG_ENTRY_TABLE: {
 				SQLiteDatabase db = mDbHelper.getWritableDatabase();
-				long id = db.insert(LogEntryContract.LogEntry.TABLE, null, values);
+				long id = db.insert(LogEntryContract.TABLE, null, values);
 				if (id == -1) {
 					throw new SQLException("failed to insert record into " + uri);
 				}
-				notifyChange(LogEntryContract.LogEntry.CONTENT_URI);
-				return ContentUris.withAppendedId(LogEntryContract.LogEntry.CONTENT_URI, id);
+				notifyChange(LogEntryContract.CONTENT_URI);
+				return ContentUris.withAppendedId(LogEntryContract.CONTENT_URI, id);
 			}
 			default:
 				throw new IllegalArgumentException("Unsupported insert uri: " + uri);
@@ -118,10 +118,10 @@ public class LogEntryProvider extends ContentProvider {
 				// hack-fix bug where empty selection doesn't return count
 				if (TextUtils.isEmpty(selection)) selection = "1";
 
-				int count = db.delete(LogEntryContract.LogEntry.TABLE, selection, selectionArgs);
+				int count = db.delete(LogEntryContract.TABLE, selection, selectionArgs);
 
 				if (count > 0) {
-					notifyChange(LogEntryContract.LogEntry.CONTENT_URI);
+					notifyChange(LogEntryContract.CONTENT_URI);
 				}
 
 				return count;
@@ -130,15 +130,15 @@ public class LogEntryProvider extends ContentProvider {
 				SQLiteDatabase db = mDbHelper.getWritableDatabase();
 
 				long id = ContentUris.parseId(uri);
-				String where = LogEntryContract.LogEntryColumns._ID + " = " + id;
+				String where = LogEntryContract.Columns._ID + " = " + id;
 				if (!TextUtils.isEmpty(selection)) {
 					where += " AND " + selection;
 				}
 
-				int count = db.delete(LogEntryContract.LogEntry.TABLE, where, selectionArgs);
+				int count = db.delete(LogEntryContract.TABLE, where, selectionArgs);
 
 				if (count > 0) {
-					notifyChange(LogEntryContract.LogEntry.CONTENT_URI);
+					notifyChange(LogEntryContract.CONTENT_URI);
 				}
 
 				return count;
@@ -158,10 +158,10 @@ public class LogEntryProvider extends ContentProvider {
 				// hack-fix bug where empty selection doesn't return count
 				if (TextUtils.isEmpty(selection)) selection = "1";
 
-				int count = db.update(LogEntryContract.LogEntry.TABLE, values, selection, selectionArgs);
+				int count = db.update(LogEntryContract.TABLE, values, selection, selectionArgs);
 
 				if (count > 0) {
-					notifyChange(LogEntryContract.LogEntry.CONTENT_URI);
+					notifyChange(LogEntryContract.CONTENT_URI);
 				}
 
 				return count;
@@ -170,15 +170,15 @@ public class LogEntryProvider extends ContentProvider {
 				SQLiteDatabase db = mDbHelper.getWritableDatabase();
 
 				long id = ContentUris.parseId(uri);
-				String where = LogEntryContract.LogEntryColumns._ID + " = " + id;
+				String where = LogEntryContract.Columns._ID + " = " + id;
 				if (!TextUtils.isEmpty(selection)) {
 					where += " AND " + selection;
 				}
 
-				int count = db.update(LogEntryContract.LogEntry.TABLE, values, where, selectionArgs);
+				int count = db.update(LogEntryContract.TABLE, values, where, selectionArgs);
 
 				if (count > 0) {
-					notifyChange(LogEntryContract.LogEntry.CONTENT_URI);
+					notifyChange(LogEntryContract.CONTENT_URI);
 				}
 
 				return count;
@@ -201,10 +201,10 @@ public class LogEntryProvider extends ContentProvider {
 	@NonNull
 	private static ContentValues contentValuesOf(@NonNull LogEntry logEntry) {
 		ContentValues values = new ContentValues(5);
-		values.put(LogEntryContract.LogEntryColumns.TIMESTAMP, logEntry.timestamp);
-		values.put(LogEntryContract.LogEntryColumns.PRIORITY, logEntry.priority);
-		values.put(LogEntryContract.LogEntryColumns.TAG, logEntry.tag);
-		values.put(LogEntryContract.LogEntryColumns.MESSAGE, logEntry.message);
+		values.put(LogEntryContract.Columns.TIMESTAMP, logEntry.timestamp);
+		values.put(LogEntryContract.Columns.PRIORITY, logEntry.priority);
+		values.put(LogEntryContract.Columns.TAG, logEntry.tag);
+		values.put(LogEntryContract.Columns.MESSAGE, logEntry.message);
 		return values;
 	}
 
@@ -212,12 +212,12 @@ public class LogEntryProvider extends ContentProvider {
 	public static Uri insertLogEntry(@NonNull Context context, @NonNull LogEntry logEntry) {
 		ContentResolver resolver = context.getContentResolver();
 		ContentValues contentValues = contentValuesOf(logEntry);
-		return resolver.insert(LogEntryContract.LogEntry.CONTENT_URI, contentValues);
+		return resolver.insert(LogEntryContract.CONTENT_URI, contentValues);
 	}
 
 	public static boolean deleteLogEntry(@NonNull Context context, long logEntryId) {
 		ContentResolver resolver = context.getContentResolver();
-		Uri uri = ContentUris.withAppendedId(LogEntryContract.LogEntry.CONTENT_URI, logEntryId);
+		Uri uri = ContentUris.withAppendedId(LogEntryContract.CONTENT_URI, logEntryId);
 		return 1 == resolver.delete(uri, null, null);
 	}
 
@@ -227,7 +227,7 @@ public class LogEntryProvider extends ContentProvider {
 
 	public static int deleteLogEntries(@NonNull Context context, @Nullable String selection, @Nullable String[] selectionArgs) {
 		ContentResolver resolver = context.getContentResolver();
-		return resolver.delete(LogEntryContract.LogEntry.CONTENT_URI, selection, selectionArgs);
+		return resolver.delete(LogEntryContract.CONTENT_URI, selection, selectionArgs);
 	}
 
 }

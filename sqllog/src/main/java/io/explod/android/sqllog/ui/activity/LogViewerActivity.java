@@ -28,7 +28,7 @@ public class LogViewerActivity extends AppCompatActivity implements
 	private static final String SORT_ORDER = "sortOrder";
 	private static final String MIN_PRIORITY = "minPriority";
 
-	private static final String DEFAULT_SORT = LogEntryContract.LogEntry.SORT_DEFAULT;
+	private static final String DEFAULT_SORT = LogEntryContract.Sort.DEFAULT;
 	private static final int DEFAULT_MIN_PRIORITY = Log.VERBOSE;
 
 	private LogEntryAdapter mLogEntryAdapter;
@@ -71,12 +71,12 @@ public class LogViewerActivity extends AppCompatActivity implements
 			String sort = args.getString(SORT_ORDER);
 			// api 12 default values for args not supported
 			if (sort == null) {
-				sort = LogEntryContract.LogEntry.SORT_DEFAULT;
+				sort = DEFAULT_SORT;
 			}
 			int minPriority = args.getInt(MIN_PRIORITY);
 			// api 12 default values for args not supported
 			if (minPriority == 0) {
-				minPriority = Log.VERBOSE;
+				minPriority = DEFAULT_MIN_PRIORITY;
 			}
 			mSortOrder = sort;
 			mMinPriority = minPriority;
@@ -88,9 +88,9 @@ public class LogViewerActivity extends AppCompatActivity implements
 		switch (id) {
 			case LOADER_LOGS: {
 				return new CursorLoader(this,
-					LogEntryContract.LogEntry.CONTENT_URI,
-					LogEntryContract.LogEntry.PROJECTION_ALL,
-					LogEntryContract.LogEntryColumns.PRIORITY + " >= ?",
+					LogEntryContract.CONTENT_URI,
+					LogEntryContract.Projection.ALL,
+					LogEntryContract.Columns.PRIORITY + " >= ?",
 					new String[]{String.valueOf(mMinPriority)},
 					mSortOrder
 				);
@@ -162,10 +162,10 @@ public class LogViewerActivity extends AppCompatActivity implements
 			public void onSelection(int index) {
 				switch (index) {
 					case 0:
-						mSortOrder = LogEntryContract.LogEntry.SORT_DATE;
+						mSortOrder = LogEntryContract.Sort.DATE;
 						break;
 					case 1:
-						mSortOrder = LogEntryContract.LogEntry.SORT_PRIORITY;
+						mSortOrder = LogEntryContract.Sort.PRIORITY;
 						break;
 					default:
 						return;
