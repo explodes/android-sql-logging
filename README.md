@@ -40,12 +40,12 @@ Setup
 In your app's AndroidManifest, you will need to include two items:
 ```xml
 <activity
-    android:name="io.explod.android.timbersql.ui.activity.LogViewerActivity"
+    android:name="io.explod.android.sqllog.ui.activity.LogViewerActivity"
     android:exported="false"/>
 
 <provider
-    android:name="io.explod.android.timbersql.data.LogEntryProvider"
-    android:authorities="io.explod.android.timbersql.logentry"
+    android:name="io.explod.android.sqllog.data.LogEntryProvider"
+    android:authorities="io.explod.android.sqllog.logentry"
     android:exported="false"/>
 ```
 
