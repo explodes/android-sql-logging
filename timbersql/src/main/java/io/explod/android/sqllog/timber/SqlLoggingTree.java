@@ -1,4 +1,4 @@
-package io.explod.android.timbersql;
+package io.explod.android.sqllog.timber;
 
 import android.content.Context;
 import android.support.annotation.NonNull;

@@ -2,7 +2,7 @@ package io.explod.android.sqllog.sample;
 
 import android.app.Application;
 
-import io.explod.android.timbersql.SqlLoggingTree;
+import io.explod.android.sqllog.timber.SqlLoggingTree;
 import timber.log.Timber;
 
 
