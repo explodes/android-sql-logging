@@ -6,6 +6,8 @@ import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.UriMatcher;
+import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
@@ -15,20 +17,45 @@ import android.support.annotation.Nullable;
 import android.text.TextUtils;
 import android.util.Log;
 
+import static io.explod.android.sqllog.data.LogEntryContract.CONTENT_TYPE_DIR;
+import static io.explod.android.sqllog.data.LogEntryContract.CONTENT_TYPE_ITEM;
+import static io.explod.android.sqllog.data.LogEntryContract.TABLE;
+
 
 public class LogEntryProvider extends ContentProvider {
+
+	private static final String AUTHORITY_KEY = "io.explod.sqllog.log.authority";
+
+	public static void initialize(@NonNull Context applicationContext) {
+		String authority = readManifestMetadata(applicationContext, AUTHORITY_KEY);
+
+		sUriMatcher = new UriMatcher(UriMatcher.NO_MATCH);
+		sUriMatcher.addURI(authority, TABLE, LOG_ENTRY_TABLE);
+		sUriMatcher.addURI(authority, TABLE + "/#", LOG_ENTRY_ROW);
+
+		LogEntryContract.setAuthority(authority);
+	}
+
+	@NonNull
+	private static String readManifestMetadata(@NonNull Context context, @NonNull String key) {
+		try {
+			ApplicationInfo ai = context.getPackageManager().getApplicationInfo(context.getPackageName(), PackageManager.GET_META_DATA);
+			String value = ai.metaData.getString(key);
+			if (TextUtils.isEmpty(value)) {
+				throw new IllegalArgumentException("Value of " + key + " is empty and thus invalid");
+			}
+			return value;
+		} catch (Exception e) {
+			throw new RuntimeException("Unable to load logging authority", e);
+		}
+	}
 
 	private static final String TAG = LogEntryProvider.class.getSimpleName();
 
 	private static final int LOG_ENTRY_TABLE = 1;
 	private static final int LOG_ENTRY_ROW = 2;
 
-	private static final UriMatcher sUriMatcher = new UriMatcher(UriMatcher.NO_MATCH);
-
-	static {
-		sUriMatcher.addURI(LogEntryContract.AUTHORITY, LogEntryContract.TABLE, LOG_ENTRY_TABLE);
-		sUriMatcher.addURI(LogEntryContract.AUTHORITY, LogEntryContract.TABLE + "/#", LOG_ENTRY_ROW);
-	}
+	private static UriMatcher sUriMatcher;
 
 	private LogEntryDbHelper mDbHelper;
 
@@ -48,9 +75,9 @@ public class LogEntryProvider extends ContentProvider {
 	public String getType(@NonNull Uri uri) {
 		switch (sUriMatcher.match(uri)) {
 			case LOG_ENTRY_TABLE:
-				return LogEntryContract.CONTENT_TYPE;
+				return CONTENT_TYPE_DIR;
 			case LOG_ENTRY_ROW:
-				return LogEntryContract.CONTENT_ITEM_TYPE;
+				return CONTENT_TYPE_ITEM;
 			default:
 				return null;
 		}
@@ -69,7 +96,7 @@ public class LogEntryProvider extends ContentProvider {
 				if (TextUtils.isEmpty(sortOrder))
 					sortOrder = LogEntryContract.Sort.DEFAULT;
 
-				return db.query(LogEntryContract.TABLE, projection, selection, selectionArgs, null, null, sortOrder);
+				return db.query(TABLE, projection, selection, selectionArgs, null, null, sortOrder);
 			}
 			case LOG_ENTRY_ROW: {
 				SQLiteDatabase db = mDbHelper.getReadableDatabase();
@@ -82,7 +109,7 @@ public class LogEntryProvider extends ContentProvider {
 					where += " AND " + selection;
 				}
 
-				return db.query(LogEntryContract.TABLE, projection, where, selectionArgs, null, null, sortOrder);
+				return db.query(TABLE, projection, where, selectionArgs, null, null, sortOrder);
 			}
 			default:
 				return null;
@@ -97,7 +124,7 @@ public class LogEntryProvider extends ContentProvider {
 		switch (sUriMatcher.match(uri)) {
 			case LOG_ENTRY_TABLE: {
 				SQLiteDatabase db = mDbHelper.getWritableDatabase();
-				long id = db.insert(LogEntryContract.TABLE, null, values);
+				long id = db.insert(TABLE, null, values);
 				if (id == -1) {
 					throw new SQLException("failed to insert record into " + uri);
 				}
@@ -118,7 +145,7 @@ public class LogEntryProvider extends ContentProvider {
 				// hack-fix bug where empty selection doesn't return count
 				if (TextUtils.isEmpty(selection)) selection = "1";
 
-				int count = db.delete(LogEntryContract.TABLE, selection, selectionArgs);
+				int count = db.delete(TABLE, selection, selectionArgs);
 
 				if (count > 0) {
 					notifyChange(LogEntryContract.CONTENT_URI);
@@ -135,7 +162,7 @@ public class LogEntryProvider extends ContentProvider {
 					where += " AND " + selection;
 				}
 
-				int count = db.delete(LogEntryContract.TABLE, where, selectionArgs);
+				int count = db.delete(TABLE, where, selectionArgs);
 
 				if (count > 0) {
 					notifyChange(LogEntryContract.CONTENT_URI);
@@ -158,7 +185,7 @@ public class LogEntryProvider extends ContentProvider {
 				// hack-fix bug where empty selection doesn't return count
 				if (TextUtils.isEmpty(selection)) selection = "1";
 
-				int count = db.update(LogEntryContract.TABLE, values, selection, selectionArgs);
+				int count = db.update(TABLE, values, selection, selectionArgs);
 
 				if (count > 0) {
 					notifyChange(LogEntryContract.CONTENT_URI);
@@ -175,7 +202,7 @@ public class LogEntryProvider extends ContentProvider {
 					where += " AND " + selection;
 				}
 
-				int count = db.update(LogEntryContract.TABLE, values, where, selectionArgs);
+				int count = db.update(TABLE, values, where, selectionArgs);
 
 				if (count > 0) {
 					notifyChange(LogEntryContract.CONTENT_URI);

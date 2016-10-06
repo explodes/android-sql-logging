@@ -29,6 +29,7 @@ public class App extends Application {
 
 	@Override
 	public void onCreate() {
+	    LogEntryProvider.initialize(this);
 		Timber.plant(new SqlLoggingTree(this, DEFAULT_TAG));
 	}
 }
@@ -43,10 +44,14 @@ In your app's AndroidManifest, you will need to include two items:
     android:name="io.explod.android.sqllog.ui.activity.LogViewerActivity"
     android:exported="false"/>
 
+<!-- Important: set your own authority name and provide that name in the metadata -->
+
 <provider
     android:name="io.explod.android.sqllog.data.LogEntryProvider"
-    android:authorities="io.explod.android.sqllog.logentry"
+    android:authorities="your.authority.name"
     android:exported="false"/>
+
+<meta-data android:name="io.explod.sqllog.log.authority" android:value="your.authority.name"/>
 ```
 
 And finally, to view the logs, you start the activity:
