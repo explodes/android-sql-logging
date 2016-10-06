@@ -5,8 +5,8 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
 
-import io.explod.android.timbersql.data.LogEntry;
-import io.explod.android.timbersql.data.LogEntryProvider;
+import io.explod.android.sqllog.data.LogEntry;
+import io.explod.android.sqllog.data.LogEntryProvider;
 import timber.log.Timber;
 
 public class SqlLoggingTree extends Timber.Tree {

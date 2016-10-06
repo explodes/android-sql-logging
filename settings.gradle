@@ -1,1 +1,1 @@
-include ':sample', ':timbersql'
+include ':sample', ':sqllog', ':timbersql'

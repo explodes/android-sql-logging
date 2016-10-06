@@ -9,7 +9,7 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="io.explod.android.timbersql.sample.ui.MainActivity">
+    tools:context="io.explod.android.sqllog.sample.ui.MainActivity">
 
 
     <ScrollView
